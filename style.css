@@ -2167,6 +2167,9 @@ body.cursor-hover #cursor-label {
   box-shadow: 0 10px 30px rgba(255, 122, 0, 0.2);
 }
 
+.social-link { position: relative; }
+
+
 /* ─── FOOTER ─────────────────────────────────────────────── */
 #footer {
   padding: 40px 0;
@@ -2259,6 +2262,8 @@ body.cursor-hover #cursor-label {
 
   .orbit-system {
     margin: 0 auto 60px;
+    transform: scale(0.65);
+    transform-origin: center center;
   }
 
   #skills {
@@ -3531,16 +3536,7 @@ body.cursor-hover #cursor-label {
 #testimonials { z-index: 12; }
 #contact   { z-index: 13; }
 
-/* Mobile: disable effect */
-@media (max-width: 768px) {
-  #services,
-  #skills,
-  #testimonials,
-  #contact {
-    border-radius: 0;
-    box-shadow: none;
-  }
-}
+/* Mobile effect enabled as requested by user */
 
 /* ─── SERVICE CARD SCROLL ZOOM BOUNCE EFFECT (Desktop only) ── */
 @media (min-width: 769px) {
