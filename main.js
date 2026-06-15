@@ -437,17 +437,7 @@ function initHorizontalScroll() {
       });
     });
   }
-
-  // Touch scroll
-  wrapper.addEventListener('touchstart', e => {
-    startX = e.touches[0].pageX;
-    scrollLeft = wrapper.scrollLeft;
-  }, { passive: true });
-
-  wrapper.addEventListener('touchmove', e => {
-    const x = e.touches[0].pageX;
-    wrapper.scrollLeft = scrollLeft - (x - startX);
-  }, { passive: true });
+  // Native mobile scrolling handled via CSS (overflow-x: auto & scroll-snap)
 }
 
 /* ─── 3D CARD TILT ───────────────────────────────────────── */
@@ -622,40 +612,7 @@ function initProjectOverlay() {
 
 /* ─── ORBIT SKILL SYSTEM ─────────────────────────────────── */
 function initOrbit() {
-  const system = $('.orbit-system');
-  if (!system) return;
-
-  const planets = $$('.orbit-planet', system);
-  const rings = [
-    { r: 100, speed: 0.012 },
-    { r: 165, speed: 0.008 },
-    { r: 230, speed: 0.005 },
-  ];
-
-  const planetData = planets.map((el, i) => {
-    const ring = rings[i % rings.length];
-    return {
-      el,
-      r: ring.r,
-      angle: (i / planets.length) * Math.PI * 2,
-      speed: ring.speed * (i % 2 === 0 ? 1 : -1),
-    };
-  });
-
-  rafCbs.add(() => {
-    planetData.forEach(p => {
-      p.angle += p.speed;
-      const size = system.offsetWidth;
-      const cx = size / 2;
-      const cy = size / 2;
-      const scale = size / 500;
-      const x = cx + Math.cos(p.angle) * p.r * scale - 26;
-      const y = cy + Math.sin(p.angle) * p.r * scale - 26;
-      p.el.style.left = x + 'px';
-      p.el.style.top = y + 'px';
-      p.el.style.position = 'absolute';
-    });
-  });
+  // Logic replaced by pure CSS hardware-accelerated animations in style.css
 }
 
 /* ─── TESTIMONIALS CAROUSEL ──────────────────────────────── */

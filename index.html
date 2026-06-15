@@ -358,15 +358,76 @@
       </div>
 
       <div class="hero-inner">
-        <p class="eyebrow hero-eyebrow" style="margin-bottom:32px">
-          Open for Projects — 2026
-        </p>
 
         <h1 class="hero-heading" id="hero-heading">
-          <span class="line"><span class="line-inner">TURNING</span></span>
-          <span class="line"><span class="line-inner accent">VIEWS INTO</span></span>
-          <span class="line"><span class="line-inner">VISUALS<span class="accent-orange">.</span></span></span>
+          <span class="line"><span class="line-inner" id="hero-line-1" style="transform:none;opacity:1;"></span></span>
+          <span class="line"><span class="line-inner accent" id="hero-line-2" style="transform:none;opacity:1;"></span></span>
+          <span class="line"><span class="line-inner" id="hero-line-3" style="transform:none;opacity:1;"></span></span>
         </h1>
+
+        <style>
+          .hero-letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(18px) scale(0.9);
+            transition: opacity 0.2s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1);
+          }
+          .hero-letter.lit {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+          .hero-letter-space {
+            display: inline-block;
+            width: 0.28em;
+          }
+        </style>
+
+        <script>
+          (function () {
+            var lines = [
+              { id: 'hero-line-1', words: ['TURNING'],       accent: false },
+              { id: 'hero-line-2', words: ['VIEWS','INTO'],  accent: false },
+              { id: 'hero-line-3', words: ['VISUALS'],       accent: true  }
+            ];
+
+            var allSpans = [];
+
+            lines.forEach(function(line) {
+              var el = document.getElementById(line.id);
+              if (!el) return;
+              line.words.forEach(function(word, wi) {
+                if (wi > 0) {
+                  var sp = document.createElement('span');
+                  sp.className = 'hero-letter-space';
+                  el.appendChild(sp);
+                }
+                word.split('').forEach(function(ch) {
+                  var s = document.createElement('span');
+                  s.className = 'hero-letter';
+                  s.textContent = ch;
+                  el.appendChild(s);
+                  allSpans.push(s);
+                });
+              });
+              if (line.accent) {
+                var dot = document.createElement('span');
+                dot.className = 'accent-orange hero-letter';
+                dot.textContent = '.';
+                el.appendChild(dot);
+                allSpans.push(dot);
+              }
+            });
+
+            /* Wait for preloader to fully exit (~2400ms) then type */
+            var DELAY = 2400;
+            var GAP   = 55;
+
+            allSpans.forEach(function(s, i) {
+              setTimeout(function() { s.classList.add('lit'); }, DELAY + i * GAP);
+            });
+          })();
+        </script>
+
 
         <!-- Typewriter role cycling — stays fixed, no slide animation -->
         <div style="
@@ -381,14 +442,14 @@
           z-index: 5;
         ">
           <span style="
-            font-size: clamp(0.75rem, 1vw, 0.95rem);
+            font-size: clamp(0.55rem, 1vw, 0.95rem);
             font-weight: 600;
             letter-spacing: 0.25em;
             text-transform: uppercase;
             color: var(--gray);
           ">I'm a</span>
           <span id="hero-typewriter" style="
-            font-size: clamp(0.85rem, 1.2vw, 1.05rem);
+            font-size: clamp(0.6rem, 1.2vw, 1.05rem);
             font-weight: 800;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -861,8 +922,57 @@
           <div class="about-content">
             <p class="eyebrow fade-up">Who I Am</p>
             <h3 class="heading-xl fade-up" id="about-heading" style="transition-delay:0.1s">
-              I'm <span style="color:#FF7A00;">SUGANESH</span><span class="accent-orange">.</span>
+              I'm <span id="suganesh-type" style="color:#FF7A00; display:inline-block;"><span class="sug-letter" style="opacity:0">S</span><span class="sug-letter" style="opacity:0">U</span><span class="sug-letter" style="opacity:0">G</span><span class="sug-letter" style="opacity:0">A</span><span class="sug-letter" style="opacity:0">N</span><span class="sug-letter" style="opacity:0">E</span><span class="sug-letter" style="opacity:0">S</span><span class="sug-letter" style="opacity:0">H</span></span><span class="accent-orange" style="opacity:0" id="suganesh-dot">.</span>
             </h3>
+
+            <style>
+              .sug-letter {
+                display: inline-block;
+                transform: translateY(12px);
+                transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.16,1,0.3,1);
+              }
+              .sug-letter.visible {
+                opacity: 1 !important;
+                transform: translateY(0);
+              }
+              #suganesh-dot {
+                display: inline-block;
+                transition: opacity 0.3s ease 0.6s;
+              }
+              #suganesh-dot.visible {
+                opacity: 1 !important;
+              }
+            </style>
+
+            <script>
+              (function () {
+                const letters = document.querySelectorAll('.sug-letter');
+                const dot     = document.getElementById('suganesh-dot');
+                const heading = document.getElementById('about-heading');
+                let played = false;
+
+                function playType() {
+                  if (played) return;
+                  played = true;
+                  letters.forEach(function(el, i) {
+                    setTimeout(function() {
+                      el.classList.add('visible');
+                    }, i * 80);
+                  });
+                  setTimeout(function() {
+                    dot.classList.add('visible');
+                  }, letters.length * 80 + 120);
+                }
+
+                const obs = new IntersectionObserver(function(entries) {
+                  entries.forEach(function(entry) {
+                    if (entry.isIntersecting) playType();
+                  });
+                }, { threshold: 0.4 });
+
+                obs.observe(heading);
+              })();
+            </script>
 
             <p class="body-text fade-up">
               <em style="color:var(--white); font-style:normal; font-weight:600;">A Graphic Designer</em> based in
@@ -993,6 +1103,148 @@
 
         </div>
       </div>
+    </section>
+
+    <!-- ───────────────────────────────────────────
+         CLIENT LOGOS MARQUEE
+    ─────────────────────────────────────────── -->
+    <section id="clients" class="clients-section" aria-labelledby="clients-heading">
+      <div class="container">
+        <div class="clients-header">
+          <p class="eyebrow">Trusted By</p>
+          <h2 class="heading-xl" id="clients-heading">
+            Clients I've <span style="color:#FF7A00;">Worked With</span><span class="accent-orange">.</span>
+          </h2>
+        </div>
+      </div>
+
+      <!-- Infinite Logo Marquee -->
+      <div class="logo-marquee-wrap" aria-hidden="true">
+        <div class="logo-marquee-track">
+          <!-- Set A -->
+          <div class="logo-item"><img src="uploads/Logo/FAST IN Q.png" alt="Fast In Q" /></div>
+          <div class="logo-item"><img src="uploads/Logo/HAPPY MINDS.png" alt="Happy Minds" /></div>
+          <div class="logo-item"><img src="uploads/Logo/Laso pic.png" alt="Laso" /></div>
+          <div class="logo-item"><img src="uploads/Logo/PP.png" alt="PP" /></div>
+          <div class="logo-item"><img src="uploads/Logo/RE.png" alt="RE" /></div>
+          <div class="logo-item"><img src="uploads/Logo/TNCC.png" alt="TNCC" /></div>
+          <div class="logo-item"><img src="uploads/Logo/XUMO.png" alt="XUMO" /></div>
+          <div class="logo-item"><img src="uploads/Logo/Zen x ai.png" alt="Zen x AI" /></div>
+          <div class="logo-item"><img src="uploads/Logo/pa.png" alt="PA" /></div>
+          <div class="logo-item"><img src="uploads/Logo/va.png" alt="VA" /></div>
+          <!-- Set B — exact duplicate for seamless infinite loop -->
+          <div class="logo-item"><img src="uploads/Logo/FAST IN Q.png" alt="Fast In Q" /></div>
+          <div class="logo-item"><img src="uploads/Logo/HAPPY MINDS.png" alt="Happy Minds" /></div>
+          <div class="logo-item"><img src="uploads/Logo/Laso pic.png" alt="Laso" /></div>
+          <div class="logo-item"><img src="uploads/Logo/PP.png" alt="PP" /></div>
+          <div class="logo-item"><img src="uploads/Logo/RE.png" alt="RE" /></div>
+          <div class="logo-item"><img src="uploads/Logo/TNCC.png" alt="TNCC" /></div>
+          <div class="logo-item"><img src="uploads/Logo/XUMO.png" alt="XUMO" /></div>
+          <div class="logo-item"><img src="uploads/Logo/Zen x ai.png" alt="Zen x AI" /></div>
+          <div class="logo-item"><img src="uploads/Logo/pa.png" alt="PA" /></div>
+          <div class="logo-item"><img src="uploads/Logo/va.png" alt="VA" /></div>
+        </div>
+      </div>
+
+      <style>
+        /* ── Clients Section ── */
+        .clients-section {
+          padding: 40px 0 60px;
+          overflow: hidden;
+        }
+
+        .clients-header {
+          text-align: center;
+          margin-bottom: 72px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        /* ── Logo Marquee ── */
+        .logo-marquee-wrap {
+          position: relative;
+          width: 100%;
+          overflow: hidden;
+          /* Soft fade edges */
+          -webkit-mask-image: linear-gradient(
+            to right,
+            transparent 0%,
+            #000 12%,
+            #000 88%,
+            transparent 100%
+          );
+          mask-image: linear-gradient(
+            to right,
+            transparent 0%,
+            #000 12%,
+            #000 88%,
+            transparent 100%
+          );
+        }
+
+        .logo-marquee-track {
+          display: flex;
+          align-items: center;
+          gap: 48px;
+          width: max-content;
+          animation: logoScroll 28s linear infinite;
+        }
+
+        .logo-marquee-track:hover {
+          animation-play-state: paused;
+        }
+
+        @keyframes logoScroll {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+
+        .logo-item {
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 12px 20px;
+          border-radius: 14px;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 122, 0, 0.08);
+          transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .logo-item:hover {
+          background: rgba(255, 122, 0, 0.08);
+          border-color: rgba(255, 122, 0, 0.22);
+        }
+
+        .logo-item img {
+          height: 44px;
+          width: auto;
+          max-width: 110px;
+          object-fit: contain;
+          filter: grayscale(1) brightness(0.75);
+          transition: filter 0.35s ease, transform 0.35s ease;
+        }
+
+        .logo-item:hover img {
+          filter: grayscale(0) brightness(1);
+          transform: scale(1.08);
+        }
+
+        @media (max-width: 768px) {
+          .clients-section {
+            padding: 60px 0 40px;
+          }
+          .logo-item img {
+            height: 34px;
+            max-width: 80px;
+          }
+          .logo-marquee-track {
+            gap: 30px;
+            animation-duration: 20s;
+          }
+        }
+      </style>
     </section>
 
     <!-- ───────────────────────────────────────────
